@@ -243,10 +243,12 @@ class YouTubeAPI:
 
         def audio_dl():
             ydl_optssx = {
+                "format": "bestaudio/best",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
+                "geo_bypass": True,
+                "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "proxy": "8.223.31.16:80"
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
