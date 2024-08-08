@@ -246,7 +246,7 @@ class YouTubeAPI:
                 "outtmpl": "downloads/%(id)s.%(ext)s",
                 "quiet": True,
                 "no_warnings": True,
-                "proxy": "8.223.31.16:80"
+                "proxy": "200.174.198.86:8888"
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
