@@ -14,7 +14,8 @@ from ZeMusic import app
 from random import  choice, randint
 
                 
-    @app.on_message(command(["سورس","سورس نجد","السورس"])
+    @app.on_message(
+      command(["سورس","سورس نجد","السورس"])
     
 )
 async def huhh(client: Client, message: Message):
