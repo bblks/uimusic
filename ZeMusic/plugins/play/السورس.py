@@ -14,27 +14,33 @@ from ZeMusic import app
 from random import  choice, randint
 
                 
-@app.on_message(
-    command(["سورس","‹ السورس ›"," ","السورس"])
+    command(["سورس","سورس نجد","السورس"])
+    
 )
 async def huhh(client: Client, message: Message):
     await message.reply_photo(
-        photo=f"https://telegra.ph/file/4b450b6cbb509bfcd9b22.jpg",
-        caption = f"""<b>  𝒘𝒆𝒍𝒄𝒐𝒎𝒆𝒖 𝒕𝒐 <b>\n<a href="https://t.me/ngd_1"> 𝒔𝒐𝒖𝒓𝒄𝒆 𝐚𝐥𝐢𝐜𝐞🥂</a></b>""",
-reply_markup=InlineKeyboardMarkup(
+        photo=f"https://telegra.ph/file/65ae4f8eed3deb620852b.jpg",
+        caption=f"• 𝗧𝗵𝗲 𝗕𝗲𝘀𝘁 𝗦𝗼𝘂𝗿𝗰𝗲 𝗢𝗻 𝗧𝗲𝗹𝗲𝗴𝗮𝗺 🎸 .",
+        reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        "  Dev🏅 ", url=f"https://t.me/Z_l_7"),
-                ],[
-                    
-                
-                    InlineKeyboardButton(
-                        " 𝒔𝒐𝒖𝒓𝒄𝒆 𝐚𝐥𝐢𝐜𝐞", url=f"https://t.me/ngd_1"),         
+                        " 𝗖𝗛𝗔𝗡𝗘𝗟 .", url=f"https://t.me/M_2_G"), 
+                 InlineKeyboardButton(
+                   "𝐬𝐨𝐮𝐫𝐜𝐞 𝐚𝐥𝐢𝐜𝐞🧚",       url=f"https://t.me/ngd_1"), 
+                 
+             ],[ 
+            InlineKeyboardButton(
+                        " ᴅᴇᴠᴇʟᴏᴘᴇʀ", url=f"https://t.me/Z_l_7"), 
+                      
+             ],[ 
+                  InlineKeyboardButton(
+                text=" أضفني الى مجموعتك",
+                url=f"https://t.me/{app.username}?startgroup=true"),
                 ],
 
             ]
 
         ),
 
-)
+    )
