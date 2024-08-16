@@ -13,10 +13,9 @@ from ZeMusic import (Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app)
 from ZeMusic import app
 from random import  choice, randint
 
-                
-    @app.on_message(
-        command(["سورس","سورس نجد","السورس"])
-    
+
+@app.on_message(
+    command(["سورس","سورس نجد","السورس"])
 )
 async def huhh(client: Client, message: Message):
     await message.reply_photo(
