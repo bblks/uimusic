@@ -14,7 +14,7 @@ import config
   command(["المبرمج","مبرمج السورس","مبرمج","مطور السورس"])
 )
 async def huhh(client: Client, message: Message):
-    dev_id = 5145609515
+    dev_id = 7085943284
     dev = await client.get_users(dev_id)
     name = dev.first_name
     usrnam = dev.username
