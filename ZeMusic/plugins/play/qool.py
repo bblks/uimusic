@@ -7,7 +7,7 @@ from ZeMusic import app
 from config import *
 
 
-@app.on_message(filters.command("قولي", ""))
+@app.on_message(filters.command("قولي", "انطقي"))
 async def speak(_, message: Message):
     chat_id = message.chat.id
     data = message.text.split(maxsplit=1)
