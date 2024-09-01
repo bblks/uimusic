@@ -3,7 +3,7 @@ from pyrogram.types import Message
 from gtts import gTTS
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import os
-from YousefMusic import app
+from ZeMusic import app
 from config import *
 
 
@@ -12,7 +12,7 @@ async def speak(_, message: Message):
     chat_id = message.chat.id
     data = message.text.split(maxsplit=1)
     if len(data) < 2:return await message.reply("↢ اكتب قول + الجمله \nمثال : قول مازن \n√", reply_to_message_id=message.id)
-    wait = await message.reply('↢ المره الجايه هتدفع 100ج عشان الامر بصوت بنت', reply_to_message_id=message.id)
+    wait = await message.reply('↢ مره ثاني بتدفع SR100 عشان الامر بصوت بنت', reply_to_message_id=message.id)
     if data[1].isascii():
         language = 'en'
     else:
