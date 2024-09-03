@@ -9,7 +9,6 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, 
 from pyrogram.errors import MessageNotModified
 import config
 
-
 $question = str_replace("همس ","",$text);
 if($text == "همس ".$question){
 $ch = curl_init();
