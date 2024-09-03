@@ -18,77 +18,95 @@ from ZeMusic.plugins.play.filters import command
 def remove_if_exists(path):
     if os.path.exists(path):
         os.remove(path)
-channel = "eer_5o"              
+channel = "ngd_1"              
 lnk = config.CHANNEL_LINK
 Nem = config.BOT_NAME + " ابحث"
-@app.on_message(command(["song", "/song", "بحث", Nem]))
-async def song_downloader(client, message: Message):
-    query = " ".join(message.command[1:])
-    m = await message.reply_text("<b>⇜ جـارِ البحث ..</b>")
-    
-    ydl_opts = {
-        "format": "bestaudio[ext=m4a]",
-        "keepvideo": True,
-        "prefer_ffmpeg": False,
-        "geo_bypass": True,
-        "outtmpl": "%(title)s.%(ext)s",
-        "quiet": True,
-        "cookiefile": cookie_txt_file(),  # إضافة هذا السطر لتمرير ملف الكوكيز
-    }
 
-    try:
-        results = YoutubeSearch(query, max_results=1).to_dict()
-        link = f"https://youtube.com{results[0]['url_suffix']}"
-        title = results[0]["title"][:40]
-        thumbnail = results[0]["thumbnails"][0]
-        thumb_name = f"{title}.jpg"
-        thumb = requests.get(thumbnail, allow_redirects=True)
-        open(thumb_name, "wb").write(thumb.content)
-        duration = results[0]["duration"]
+@app.on_message(filters.regex(r"^(بحث)"))
+async def searcher(_, message: Message):
+    chat_id = message.chat.id
+    wait = await message.reply_text("Processing...")
+    text = message.text.split(" ", 1)[1]
+    try: search = Search(text)
+    except: return await app.edit_message_text(
+                chat_id=chat_id,
+                message_id=wait.id, 
+                text="An error occurred or no results were found."
+            )
+    result = search.results[0]
+    info = result.vid_info["videoDetails"]
+    vid_id = info["videoId"]
+    title = info["title"]
+    author = info["author"]
+    length = info["lengthSeconds"]
+    views = info["viewCount"]
+    thumbnail = info["thumbnail"]["thumbnails"][-1]["url"]
+    caption = f"- title: {title}\n- author: {author}\n- duration: {length}sec.\n- views: {views}"
+    markup = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("- التالي -", callback_data=f"next_{text}_0"),
+        ],
+        [
+            InlineKeyboardButton("- Watch In YouTube -", url=f"https://www.youtube.com/watch?v={vid_id}"),
+            InlineKeyboardButton("- Download Thumbnail -", url=thumbnail)
+        ],
+        [
+            InlineKeyboardButton("- Dev ⛄️ -", url="Z_l_7.t.me")
+        ]
+    ])
+    await message.reply_photo(
+        photo = thumbnail, 
+        caption = caption,
+        reply_to_message_id = message.id,
+        reply_markup = markup
+    )
+    await app.delete_messages(chat_id, wait.id)
 
-    except Exception as e:
-        await m.edit("- لم يتم العثـور على نتائج حاول مجددا")
-        print(str(e))
-        return
-    
-    await m.edit("<b>جاري التحميل ♪</b>")
-    
-    try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info_dict = ydl.extract_info(link, download=False)
-            audio_file = ydl.prepare_filename(info_dict)
-            ydl.process_info(info_dict)
-        
-        rep = f"ᴍʏ ᴡᴏʀʟᴅ 𓏺 @{channel} "
-        host = str(info_dict["uploader"])
-        secmul, dur, dur_arr = 1, 0, duration.split(":")
-        for i in range(len(dur_arr) - 1, -1, -1):
-            dur += int(float(dur_arr[i])) * secmul
-            secmul *= 60
-        
-        await message.reply_audio(
-            audio=audio_file,
-            caption=rep,
-            title=title,
-            performer=host,
-            thumb=thumb_name,
-            duration=dur,
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(text=" Developer ", url=f"http://t.me/Z_l_7"),
-                    ],
-                ]
-            ),
-        )
-        await m.delete()
 
-    except Exception as e:
-        await m.edit("error, wait for bot owner to fix")
-        print(e)
+@app.on_callback_query(filters.regex(r"^(next|back)"))
+async def returner(_, callback: CallbackQuery):
+    await app.answer_callback_query(callback.id, "- Wait a few seconds, please.")
+    chat_id = callback.message.chat.id
+    data = callback.data.split("_")[1:]
+    text = data[0]
+    index = int(data[1]) + 1 if callback.data.startswith("next") else int(data[1]) - 1
+    search = Search(text)
+    result = search.results[index]
+    info = result.vid_info["videoDetails"]
+    title = info["title"]
+    author = info["author"]
+    length = info["lengthSeconds"]
+    views = info["viewCount"]
+    thumbnail = info["thumbnail"]["thumbnails"][-1]["url"]
+    caption = f"- title: {title}\n- author: {author}\n- duration: {length}sec.\n- views: {views}"
+    markup = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton(
+                "- التالي -" if index < len(search.results) else "- النهايه -", 
+                callback_data=f"next_{text}_{index}" if index < len(search.results) else "theEnd"),
+            InlineKeyboardButton(
+                "- العوده -" if index != 0 else "- البدايه -",
+                callback_data=f"back_{text}_{index}" if index != 0 else "theStart")
+        ],
+        [
+            InlineKeyboardButton("- Watch In YouTube -", url=f"https://www.youtube.com/watch?v={info['videoId']}"),
+            InlineKeyboardButton("- Download Thumbnail -", url=thumbnail)
+        ],
+        [
+            InlineKeyboardButton("- Dev ⛄️ -", url="Z_l_7.t.me")
+        ]
+    ])
+    await app.edit_message_media(
+        chat_id=chat_id,
+        message_id=callback.message.id, 
+        media=InputMediaPhoto(thumbnail, caption=caption),
+        reply_markup=markup
+    )
 
-    try:
-        remove_if_exists(audio_file)
-        remove_if_exists(thumb_name)
-    except Exception as e:
-        print(e)
+def main():
+    print("Hello!")
+    app.run()
+
+if __name__=="__main__": main()
+# 𝗪𝗥𝗜𝗧𝗧𝗘𝗡 𝗕𝗬 : @Z_l_7
+# 𝗦𝗢𝗨𝗥𝗖𝗘 : @NGD_1
