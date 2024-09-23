@@ -22,6 +22,9 @@ skipdb = mongodb.skipmode
 sudoersdb = mongodb.sudoers
 usersdb = mongodb.tgusersdb
 
+#########
+ders1db = mongodb.dere1
+dersdb = mongodb.dere
 # Shifting to memory [mongo sucks often]
 active = []
 activevideo = []
@@ -38,6 +41,33 @@ playmode = {}
 playtype = {}
 skipmode = {}
 
+#####################################################
+async def is_search_enabled1():
+    settings = await ders1db.find_one({"name": "search"})
+    if settings:
+        return settings.get("enabled", False)
+    return False
+
+async def enable_search1():
+    await ders1db.update_one({"name": "search"}, {"$set": {"enabled": True}}, upsert=True)
+
+async def disable_search1():
+    await ders1db.update_one({"name": "search"}, {"$set": {"enabled": False}}, upsert=True)
+
+
+async def is_search_enabled(chat_id):
+    settings = await dersdb.find_one({"name": "search", "chat_id": chat_id})
+    if settings:
+        return settings.get("enabled", False)
+    return False
+
+async def enable_search(chat_id):
+    await dersdb.update_one({"name": "search", "chat_id": chat_id}, {"$set": {"enabled": True}}, upsert=True)
+
+async def disable_search(chat_id):
+    await dersdb.update_one({"name": "search", "chat_id": chat_id}, {"$set": {"enabled": False}}, upsert=True)
+
+########################################################
 
 async def get_assistant_number(chat_id: int) -> str:
     assistant = assistantdict.get(chat_id)
