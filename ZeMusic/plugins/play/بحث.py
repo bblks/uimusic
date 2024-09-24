@@ -11,7 +11,7 @@ from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message, InputTextMessageContent, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup
 from youtube_search import YoutubeSearch
-
+from config import OWNER_ID
 from ZeMusic import app
 from ZeMusic.plugins.play.filters import command
 from ZeMusic.utils.database import is_search_enabled1, enable_search1, disable_search1
