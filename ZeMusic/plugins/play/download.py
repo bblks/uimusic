@@ -102,6 +102,8 @@ async def song_downloader(client, message: Message):
 
 
 @app.on_message(command(["تعطيل اليوتيوب"]) & filters.group)
+if "تعطيل اليوتيوب" in message.text:
+    return
 @AdminActual
 async def disable_search_command(client, message: Message, _):
     chat_id = message.chat.id
