@@ -14,7 +14,7 @@ from youtube_search import YoutubeSearch
 
 from ZeMusic import app
 from ZeMusic.plugins.play.filters import command
-from ZeMusic.utils.decorators import AdminActual
+from ZeMusic.utils.decorators import AdminActual, AdminRightsCheck
 from ZeMusic.utils.database import is_search_enabled, enable_search, disable_search
 
 def remove_if_exists(path):
@@ -102,7 +102,7 @@ async def song_downloader(client, message: Message):
 
 
 @app.on_message(command(["تعطيل اليوتيوب"]) & filters.group)
-@AdminActual
+@AdminRightsCheck
 async def disable_search_command(client, message: Message, _):
     chat_id = message.chat.id
     if not await is_search_enabled(chat_id):
@@ -113,7 +113,7 @@ async def disable_search_command(client, message: Message, _):
 
 
 @app.on_message(command(["تفعيل اليوتيوب"]) & filters.group)
-@AdminActual
+@AdminRightsCheck
 async def enable_search_command(client, message: Message, _):
     chat_id = message.chat.id
     if await is_search_enabled(chat_id):
