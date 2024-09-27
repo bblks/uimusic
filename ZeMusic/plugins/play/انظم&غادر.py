@@ -7,7 +7,6 @@ from ZeMusic.utils.database import get_assistant
 from pyrogram.types import Message 
 import config
 
-Nem = config.BOT_NAME + " غادر"
 
 @app.on_message(
     command(["المساعد انضم","انضمام المساعد","مساعد انضم"]))
