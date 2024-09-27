@@ -22,9 +22,6 @@ skipdb = mongodb.skipmode
 sudoersdb = mongodb.sudoers
 usersdb = mongodb.tgusersdb
 
-#########
-ders1db = mongodb.dere1
-dersdb = mongodb.dere
 # Shifting to memory [mongo sucks often]
 active = []
 activevideo = []
@@ -40,6 +37,11 @@ pause = {}
 playmode = {}
 playtype = {}
 skipmode = {}
+
+
+#########
+ders1db = mongodb.dere1
+dersdb = mongodb.dere
 
 #####################################################
 async def is_search_enabled1():
