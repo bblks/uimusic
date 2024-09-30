@@ -22,7 +22,7 @@ def remove_if_exists(path):
 lnk = config.CHANNEL_LINK
 Nem = config.BOT_NAME + " يوت"
 
-@app.on_message(command(["song", "/song", "بحث", Nem]) & filters.private)
+@app.on_message(command(["song", "/song", "بحث", Nem,"يوت"]) & filters.private)
 async def song_downloader1(client, message: Message):
     if not await is_search_enabled1():
         return await message.reply_text("<b>⟡ عذراً عزيزي اليوتيوب معطل من قبل المطور</b>")
