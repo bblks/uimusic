@@ -1,5 +1,5 @@
 import os
-import requests
+import re
 import config
 import aiohttp
 import aiofiles
@@ -8,8 +8,7 @@ from ZeMusic.platforms.Youtube import cookie_txt_file
 import yt_dlp
 from yt_dlp import YoutubeDL
 from pyrogram import Client, filters
-from pyrogram.errors import FloodWait
-from pyrogram.types import Message, InputTextMessageContent, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from youtube_search import YoutubeSearch
 
 from ZeMusic import app
@@ -23,11 +22,12 @@ def remove_if_exists(path):
         
 lnk = config.CHANNEL_LINK
 Nem = config.BOT_NAME + " ابحث"
+
 @app.on_message(command(["song", "/song", "بحث", Nem]) & filters.group)
 async def song_downloader(client, message: Message):
     chat_id = message.chat.id 
     if not await is_search_enabled(chat_id):
-        return await message.reply_text("⟡ عذراً عزيزي اليوتيوب معطل لتفعيل اليوتيوب اكتب تفعيل اليوتيوب ")
+        return await message.reply_text("<b>⟡عذراً عزيزي اليوتيوب معطل لتفعيل اليوتيوب اكتب تفعيل اليوتيوب</b>")
         
     query = " ".join(message.command[1:])
     m = await message.reply_text("<b>⇜ جـارِ البحث ..</b>")
@@ -43,10 +43,15 @@ async def song_downloader(client, message: Message):
         title_clean = re.sub(r'[\\/*?:"<>|]', "", title)  # تنظيف اسم الملف
         thumbnail = results[0]["thumbnails"][0]
         thumb_name = f"{title_clean}.jpg"
-        
+
         # تحميل الصورة المصغرة
-        thumb = requests.get(thumbnail, allow_redirects=True)
-        open(thumb_name, "wb").write(thumb.content)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(thumbnail) as resp:
+                if resp.status == 200:
+                    f = await aiofiles.open(thumb_name, mode='wb')
+                    await f.write(await resp.read())
+                    await f.close()
+
         duration = results[0]["duration"]
 
     except Exception as e:
@@ -106,16 +111,15 @@ async def song_downloader(client, message: Message):
         print(e)
 
 
-
 @app.on_message(command(["تعطيل اليوتيوب"]) & filters.group)
 @AdminActual
 async def disable_search_command(client, message: Message, _):
     chat_id = message.chat.id
     if not await is_search_enabled(chat_id):
-        await message.reply_text("<b>اليوتيوب معطل من قبل.</b>")
+        await message.reply_text("<b>⟡اليوتيوب معطل من قبل يالطيب</b>")
         return
     await disable_search(chat_id)
-    await message.reply_text("<b>تم تعطيل اليوتيوب بنجاح.</b>")
+    await message.reply_text("<b>⟡تم تعطيل اليوتيوب بنجاح</b>")
 
 
 @app.on_message(command(["تفعيل اليوتيوب"]) & filters.group)
@@ -123,7 +127,7 @@ async def disable_search_command(client, message: Message, _):
 async def enable_search_command(client, message: Message, _):
     chat_id = message.chat.id
     if await is_search_enabled(chat_id):
-        await message.reply_text("<b>اليوتيوب مفعل من قبل.</b>")
+        await message.reply_text("<b>⟡اليوتيوب مفعل من قبل يالطيب</b>")
         return
     await enable_search(chat_id)
-    await message.reply_text("<b>تم تفعيل اليوتيوب بنجاح.</b>")
+    await message.reply_text("<b>⟡تم تفعيل اليوتيوب بنجاح</b>")
