@@ -23,7 +23,7 @@ def remove_if_exists(path):
 lnk = config.CHANNEL_LINK
 Nem = config.BOT_NAME + " ابحث"
 
-@app.on_message(command(["song", "/song", "بحث", Nem]) & filters.group)
+@app.on_message(command(["song", "/song", "بحث", Nem,"يوت"]) & filters.group)
 async def song_downloader(client, message: Message):
     chat_id = message.chat.id 
     if not await is_search_enabled(chat_id):
