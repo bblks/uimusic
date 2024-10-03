@@ -10,7 +10,7 @@ from ZeMusic import app
 from config import OWNER_ID, LOGGER_ID, START_IMG_URL
 import config
 
-@app.on_message(command(["تشغيل", "الميوزك", "ميوزك "]))
+@app.on_message(command(["التشغيل", "الميوزك", "ميوزك "]))
 async def zdatsr(client: Client, message: Message):
     usr = await client.get_users(OWNER_ID)
     name = usr.first_name
