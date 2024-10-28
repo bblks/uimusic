@@ -60,8 +60,7 @@
         "required": true
       },
       "HEROKU_API_KEY": {
-        "description": 
-       "هنا ضع الايبي كي الخاص بحساب هيروكو من هذا الرابط https://dashboard.heroku.com/account",
+        "description": "هنا ضع الايبي كي الخاص بحساب هيروكو من هذا الرابط https://dashboard.heroku.com/account",
         "value": "",
         "required": false
       },
