@@ -26,7 +26,7 @@
       },
       "GIT_TOKEN": {
         "description": "كود توكن الحساب",
-        "value": "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",
+        "value": "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",
         "required": true
       },
       "BOT_NAME": {
