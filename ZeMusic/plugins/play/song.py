@@ -30,7 +30,8 @@ async def song_downloader(client, message: Message):
         return await message.reply_text("<b>⟡عذراً عزيزي اليوتيوب معطل لتفعيل اليوتيوب اكتب تفعيل اليوتيوب</b>")
         
     query = " ".join(message.command[1:])
-    m = await message.reply_text("<b>⇜ جـارِ البحث ..</b>")
+        
+    m = await message.reply_text("<b>جـارِ البحث ♪</b>")
     
     try:
         results = YoutubeSearch(query, max_results=1).to_dict()
@@ -43,15 +44,10 @@ async def song_downloader(client, message: Message):
         title_clean = re.sub(r'[\\/*?:"<>|]', "", title)  # تنظيف اسم الملف
         thumbnail = results[0]["thumbnails"][0]
         thumb_name = f"{title_clean}.jpg"
-
+        
         # تحميل الصورة المصغرة
-        async with aiohttp.ClientSession() as session:
-            async with session.get(thumbnail) as resp:
-                if resp.status == 200:
-                    f = await aiofiles.open(thumb_name, mode='wb')
-                    await f.write(await resp.read())
-                    await f.close()
-
+        thumb = requests.get(thumbnail, allow_redirects=True)
+        open(thumb_name, "wb").write(thumb.content)
         duration = results[0]["duration"]
 
     except Exception as e:
@@ -97,26 +93,6 @@ async def song_downloader(client, message: Message):
                 ]
             ),
         )
-
-        try:
-            await app.send_audio(
-                chat_id="@vbbbbnnnm",  # معرف القناة التي تريد الإرسال إليها 
-                audio=audio_file,
-                caption=f"⟡ {app.mention}",
-                title=title,
-                performer=info_dict.get("uploader", "Unknown"),
-                thumb=thumb_name,
-                duration=dur,
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(text=config.CHANNEL_NAME, url=lnk),
-                        ],
-                    ]
-                ),
-            )
-        except:
-            pass
         await m.delete()
 
     except Exception as e:
