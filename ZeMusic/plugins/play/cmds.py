@@ -9,28 +9,32 @@ from pyrogram.errors import MessageNotModified
 from ZeMusic import app
 from config import OWNER_ID, LOGGER_ID, START_IMG_URL
 import config
+Lnk= "https://t.me/" +config.CHANNEL_LINK
 
-@app.on_message(command(["التشغيل", "الميوزك", "ميوزك "]))
+@app.on_message(filters.regex(r"^(اوامر الميوزك|ميوزك|الاوامر|الميوزك|اوامر ميوزك)$"))
 async def zdatsr(client: Client, message: Message):
     usr = await client.get_users(OWNER_ID)
     name = usr.first_name
     usrnam = usr.username
     await message.reply_photo(
         photo=START_IMG_URL,
-        caption=f"""<b>-› مرحبا بك</b> {message.from_user.mention} .\n\n<b>-› جميع اوامر البوت موجودة بالقائمة هذي ، اضغط الازرار الي تحت واستكشف ياوحش\n»</b>""",
+        caption=f"""<b>⟡ منور يحبي باوامر الميوزك .</b>\n\n<b>⟡ استخدم الازرار الي تحت .\n⟡ عشان تشوف اوامر الميوزك يعيني .</b>""",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        " 🍻اوامــر التشغيــل ", callback_data="zzzll"),
+                        "اوامــر التشغيــل", callback_data="zzzll"),
                 ],[
                     InlineKeyboardButton(
-                        " 🧚🏻‍♂️اوامـر القنـاة ", callback_data="zzzch"),
+                        "اوامـر القنـاة", callback_data="zzzch"),
                     InlineKeyboardButton(
-                        " 🧚🏻‍♂️اوامـر الادمـن ", callback_data="zzzad"),
+                        "اوامـر الادمـن", callback_data="zzzad"),
                 ],[
                     InlineKeyboardButton(
-                        text=config.CHANNEL_NAME, url=config.CHANNEL_LINK),
+                        "اوامــر المطــور", callback_data="zzzdv"),
+                ],[
+                    InlineKeyboardButton(
+                        text=config.CHANNEL_NAME, url=Lnk),
                 ],
             ]
         ),
