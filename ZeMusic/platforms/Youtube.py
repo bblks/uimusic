@@ -400,7 +400,7 @@ class YouTubeAPI:
         if os.path.exists(f"downloads/{link.replace(self.base, '')}.mp3"):
             return f"downloads/{link.replace(self.base, '')}.mp3", True
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://youtube.virs.tech/vi/{link.replace(self.base, '')}?key=3ec1818f-f3bc-4da2-a259-48ae227d5955") as response:
+            async with session.get(f"https://youtube.virs.tech/vi/{link.replace(self.base, '')}?key=f82bed17-3e71-40d1-b35c-024eae2ae86c") as response:
                 data = await response.json()
             streaming_data = data.get("streaming_data", [])
             highest_bitrate = 0
