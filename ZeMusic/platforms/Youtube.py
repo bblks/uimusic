@@ -404,7 +404,7 @@ class YouTubeAPI:
             "outtmpl": "downloads/%(id)s.%(ext)s",
         }
         try:
-            async with ytdlx("3ec1818f-f3bc-4da2-a259-48ae227d5955", options) as client:
+            async with ytdlx("f82bed17-3e71-40d1-b35c-024eae2ae86c", options) as client:
                 path = await client.download(link.replace(self.base, ''))
         except Exception as e:
             print(e)
