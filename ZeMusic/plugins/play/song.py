@@ -3,6 +3,7 @@ import re
 import config
 import aiohttp
 import aiofiles
+from ZeMusic.platforms.Youtube import cookie_txt_file
 
 import yt_dlp
 from yt_dlp import YoutubeDL
@@ -111,6 +112,14 @@ async def song_downloader(client, message: Message):
     
     await m.edit("<b>جاري التحميل ♪</b>")
     
+    ydl_opts = {
+        "format": "bestaudio[ext=m4a]",  # تحديد صيغة M4A
+        "keepvideo": False,
+        "geo_bypass": True,
+        "outtmpl": f"{title_clean}.%(ext)s",  # استخدام اسم نظيف للملف
+        "quiet": True,
+        "cookiefile": cookie_txt_file(),
+    }
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
