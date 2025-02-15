@@ -20,7 +20,7 @@ from youtube_search import YoutubeSearch
 import config
 from ZeMusic.utils.database import is_on_off
 from ZeMusic.utils.formatters import time_to_seconds
-from pySmartDL import SmartDL
+from ytdlx import ytdlx
 
 
 async def shell_cmd(cmd):
@@ -399,29 +399,14 @@ class YouTubeAPI:
     ):
         if os.path.exists(f"downloads/{link.replace(self.base, '')}.mp3"):
             return f"downloads/{link.replace(self.base, '')}.mp3", True
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://youtube.virs.tech/vi/{link.replace(self.base, '')}?key=f82bed17-3e71-40d1-b35c-024eae2ae86c") as response:
-                data = await response.json()
-            streaming_data = data.get("streaming_data", [])
-            highest_bitrate = 0
-            for item in streaming_data:
-                if item.get("width") == 0 and item.get("height") == 0:
-                    bitrate = item.get("bitrate", 0)
-                    if bitrate > highest_bitrate:
-                        highest_bitrate = bitrate
-                        audio_url, stream_url = item.get("url"), item.get("restream")
-            try:
-                file = SmartDL(audio_url, f"downloads/{link.replace(self.base, '')}.mp3", progress_bar=False)
-                file.start(blocking=False)
-                if file.filesize == 0:
-                    return None
-                while not file.isFinished():
-                    await asyncio.sleep(.5)
-            except Exception as e: 
-                file = SmartDL(stream_url, f"downloads/{link.replace(self.base, '')}.mp3", progress_bar=False)
-                file.start(blocking=False)
-                if file.filesize == 0:
-                    return None
-                while not file.isFinished():
-                    await asyncio.sleep(.5)
-        return f"downloads/{link.replace(self.base, '')}.mp3", True
+        options = {
+            "format": "bestaudio[ext=m4a]",
+            "outtmpl": "downloads/%(id)s.%(ext)s",
+        }
+        try:
+            async with ytdlx("3ec1818f-f3bc-4da2-a259-48ae227d5955", options) as client:
+                path = await client.download(link.replace(self.base, ''))
+        except Exception as e:
+            print(e)
+            return
+        return path, True
