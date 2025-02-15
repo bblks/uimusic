@@ -3,7 +3,6 @@ import re
 import config
 import aiohttp
 import aiofiles
-from ZeMusic.platforms.Youtube import cookie_txt_file
 from config import OWNER_ID
 import yt_dlp
 from yt_dlp import YoutubeDL
